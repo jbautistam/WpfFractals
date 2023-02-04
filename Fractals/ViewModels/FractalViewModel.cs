@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Fractals.Models.Fractals;
+using Fractals.Models.Fractals.EventArguments;
 using Fractals.Models.Fractals.Generators;
 
 namespace Fractals.ViewModels
@@ -13,12 +14,16 @@ namespace Fractals.ViewModels
 	public class FractalViewModel : Base.BaseObservableObject
 	{
 		// Variables privadas
-		private FractalGenerator _fractalGenerator = new(1_935, 1_047);
+		private FractalGenerator _fractalGenerator;
+		private int _progressActual, _progressTotal;
+		private double _progressPercentage;
 		private bool _canDraw = true;
 
 		public FractalViewModel(MainViewModel mainViewModel)
 		{
 			MainViewModel = mainViewModel;
+			_fractalGenerator = new(1_935, 1_047);
+			_fractalGenerator.ProgressChanged += (sender, args) => UpdateProgress(args);
 		}
 
 		/// <summary>
@@ -74,6 +79,16 @@ namespace Fractals.ViewModels
 		}
 
 		/// <summary>
+		///		Actualiza el progreso del dibujo
+		/// </summary>
+		private void UpdateProgress(ProgressEventArgs args)
+		{
+			Actual = args.Actual;
+			Total = args.Total;
+			ProgressPercentage = args.Percentage;
+		}
+
+		/// <summary>
 		///		ViewModel principal
 		/// </summary>
 		public MainViewModel MainViewModel { get; }
@@ -85,6 +100,33 @@ namespace Fractals.ViewModels
 		{
 			get { return _canDraw; }
 			set { CheckProperty(ref _canDraw, value); }
+		}
+
+		/// <summary>
+		///		Progreso actual
+		/// </summary>
+		public int Actual
+		{
+			get { return _progressActual; }
+			set { CheckProperty(ref _progressActual, value); }
+		}
+
+		/// <summary>
+		///		Total del progreso
+		/// </summary>
+		public int Total
+		{
+			get { return _progressTotal; }
+			set { CheckProperty(ref _progressTotal, value); }
+		}
+
+		/// <summary>
+		///		Porcentaje de progreso
+		/// </summary>
+		public double ProgressPercentage
+		{
+			get { return _progressPercentage; }
+			set { CheckProperty(ref _progressPercentage, value); }
 		}
 	}
 }

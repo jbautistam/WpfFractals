@@ -9,6 +9,11 @@ namespace Fractals.Models.Fractals.Generators
 	/// </summary>
 	public interface IFractalGenerator
 	{
+        /// <summary>
+		///		Manejador del evento de progreso
+		/// </summary>
+        event EventHandler<EventArguments.ProgressEventArgs>? ProgressChanged;
+
 		/// <summary>
 		///		Obtiene los parámetros predeterminados
 		/// </summary>

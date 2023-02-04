@@ -52,10 +52,9 @@ namespace Fractals
 		private async void cmdDraw_Click(object sender, RoutedEventArgs e)
 		{
 			await DrawAsync();
-
 		}
 
-		private async void cmdReset_Click(object sender, RoutedEventArgs e)
+		private void cmdReset_Click(object sender, RoutedEventArgs e)
 		{
 			ViewModel.Reset();
 		}

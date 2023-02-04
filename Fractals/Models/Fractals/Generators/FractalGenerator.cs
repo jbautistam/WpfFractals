@@ -22,15 +22,18 @@ namespace Fractals.Models.Fractals.Generators
 			/// <summary>Conjunto de Julia</summary>
 			Julia
 		}
+        // Manejadores de eventos
+        public event EventHandler<EventArguments.ProgressEventArgs>? ProgressChanged;
 
 		public FractalGenerator(int width, int height)
 		{
-			// Crea el generador predeterminado
-			Generator = new MandelbrotSetGenerator();
-			Canvas = new CanvasModel(Generator.GetDefault(), width, height);
 			// Asigna las propiedades
 			Width = width;
 			Height = height;
+			// Crea el generador predeterminado
+			Update(FractalType.Mandelbrot);
+			//Generator = new MandelbrotSetGenerator();
+			//Canvas = new CanvasModel(Generator.GetDefault(), width, height);
 		}
 
 		/// <summary>
@@ -62,6 +65,8 @@ namespace Fractals.Models.Fractals.Generators
 						Generator = new MandelbrotSetGenerator();
 					break;
 			}
+			// Asigna el manejador de eventos
+			Generator.ProgressChanged += (sender, args) => ProgressChanged?.Invoke(this, args);
 			// Crea el canvas
 			Reset();
 		}
@@ -71,7 +76,8 @@ namespace Fractals.Models.Fractals.Generators
 		/// </summary>
 		public void Reset()
 		{
-			Canvas = new CanvasModel(Generator.GetDefault(), Width, Height);
+			if (Generator is not null)
+				Canvas = new CanvasModel(Generator.GetDefault(), Width, Height);
 		}
 
 		/// <summary>
@@ -79,7 +85,7 @@ namespace Fractals.Models.Fractals.Generators
 		/// </summary>
 		public async Task<FractalPointsModel?> ComputeFractalAsync(CancellationToken cancellationToken)
 		{
-			if (Canvas is not null)
+			if (Canvas is not null && Generator is not null)
 				return await Generator.GenerateAsync(Canvas, cancellationToken);
 			else
 				return null;
@@ -102,12 +108,12 @@ namespace Fractals.Models.Fractals.Generators
         /// <summary>
         ///     Generador de fractales
         /// </summary>
-        private IFractalGenerator Generator { get; set; }
+        private IFractalGenerator? Generator { get; set; }
 
 		/// <summary>
 		///		Canvas del generador
 		/// </summary>
-		private CanvasModel Canvas { get; set; }
+		private CanvasModel? Canvas { get; set; }
 
 		/// <summary>
 		///		Ancho

@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Numerics;
-using System.Threading.Tasks;
-using System.Threading;
 
 namespace Fractals.Models.Fractals.Generators
 {
     /// <summary>
     ///		Modelo de generación de un conjunto de Julia
     /// </summary>
-    public class JuliaSetGenerator : IFractalGenerator
+    public class JuliaSetGenerator : BaseFractalSetGenerator
     {
         /// <summary>
         ///		Obtiene el canvas predeterminado
         /// </summary>
-        public ParametersModel GetDefault()
+        public override ParametersModel GetDefault()
         {  
             ParametersModel parameters = new ParametersModel(-0.21, -0.69, -0.22, -0.7, 1_000);
 
@@ -25,23 +23,17 @@ namespace Fractals.Models.Fractals.Generators
         }
 
         /// <summary>
-        ///		Genera el conjunto de forma asíncrona
-        /// </summary>
-        public async Task<FractalPointsModel> GenerateAsync(CanvasModel canvas, CancellationToken cancellationToken)
-        {
-            return await Task.Run(() => Generate(canvas));
-        }
-
-        /// <summary>
         ///		Genera el conjunto
         /// </summary>
-        private FractalPointsModel Generate(CanvasModel canvas)
+        protected override FractalPointsModel Generate(CanvasModel canvas)
         {
             FractalPointsModel fractalPoints = new(canvas);
             Complex central = new(canvas.Parameters.XCenter, canvas.Parameters.YCenter);
 
                 // Calcula los puntos de escape del conjunto
                 for (int pixelX = 0; pixelX < canvas.Width; pixelX++)
+                {
+                    // Calcula los puntos
                     for (int pixelY = 0; pixelY < canvas.Height; pixelY++)
                     {
                         Complex point = canvas.TransformCoordinates(pixelX, pixelY) + central;
@@ -49,6 +41,9 @@ namespace Fractals.Models.Fractals.Generators
                             // Obtiene el valor de escape del punto
                             fractalPoints.Points[pixelX, pixelY] = ComputePoint(point, canvas.Parameters.Iterations, canvas.Parameters.Scape);
                     }
+                    // Lanza el evento
+                    RaiseEvent(pixelX, canvas.Width);
+                }
                 // Devuelve los puntos generados
                 return fractalPoints;
         }

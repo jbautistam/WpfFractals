@@ -8,33 +8,27 @@ namespace Fractals.Models.Fractals.Generators
     /// <summary>
     ///		Modelo de generación de un conjunto de Mandelbrot
     /// </summary>
-    public class MandelbrotSetGenerator : IFractalGenerator
+    public class MandelbrotSetGenerator : BaseFractalSetGenerator
     {
         /// <summary>
         ///		Obtiene el canvas predeterminado
         /// </summary>
-        public ParametersModel GetDefault()
+        public override ParametersModel GetDefault()
         {
             return new ParametersModel(-2.1, -1.3, 1, 1.3, 1_000);
         }
 
         /// <summary>
-        ///		Genera el conjunto de forma asíncrona
-        /// </summary>
-        public async Task<FractalPointsModel> GenerateAsync(CanvasModel canvas, CancellationToken cancellationToken)
-        {
-            return await Task.Run(() => Generate(canvas));
-        }
-
-        /// <summary>
         ///		Genera el conjunto
         /// </summary>
-        private FractalPointsModel Generate(CanvasModel canvas)
+        protected override FractalPointsModel Generate(CanvasModel canvas)
         {
             FractalPointsModel fractalPoints = new(canvas);
 
                 // Calcula los puntos de escape del conjunto
                 for (int pixelX = 0; pixelX < canvas.Width; pixelX++)
+                {
+                    // Calcula los pixels
                     for (int pixelY = 0; pixelY < canvas.Height; pixelY++)
                     {
                         Complex point = canvas.TransformCoordinates(pixelX, pixelY);
@@ -42,6 +36,9 @@ namespace Fractals.Models.Fractals.Generators
                             // Obtiene el valor de escape del punto
                             fractalPoints.Points[pixelX, pixelY] = ComputePoint(point, canvas.Parameters.Iterations, canvas.Parameters.Scape);
                     }
+                    // Lanza el evento
+                    RaiseEvent(pixelX, canvas.Width);
+                }
                 // Devuelve los puntos generados
                 return fractalPoints;
         }
