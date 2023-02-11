@@ -4,10 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Fractals.Controls.Palletes"
-             Loaded="UserControl_Loaded" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" SizeChanged="UserControl_SizeChanged">
     <Grid>
-		<Image x:Name="imgPallete" Grid.Row="0" Grid.Column="1" Width="100"  />
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<ComboBox Grid.Row="0" Grid.Column="0"
+				ItemsSource="{Binding ComboPalleteTypes.Items}" DisplayMemberPath="Text" 
+				SelectedItem="{Binding ComboPalleteTypes.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+		<Image x:Name="imgPallete" Grid.Row="1" Grid.Column="0" Margin="5" />
 	</Grid>
 </UserControl>

@@ -13,11 +13,11 @@ namespace Fractals.Models.Fractals.Generators
         /// </summary>
         public override ParametersModel GetDefault()
         {  
-            ParametersModel parameters = new ParametersModel(-0.21, -0.69, -0.22, -0.7, 1_000);
+            ParametersModel parameters = new ParametersModel(-2, -2, 2, 2, 1_000);
 
                 // Asigna el centro predeterminado
-                parameters.XCenter = -0.4;
-                parameters.YCenter = 0.6;
+                parameters.XCenter = -0.74543;
+                parameters.YCenter = 0.11301;
                 // Devuelve los parámetros
                 return parameters;
         }
@@ -36,10 +36,10 @@ namespace Fractals.Models.Fractals.Generators
                     // Calcula los puntos
                     for (int pixelY = 0; pixelY < canvas.Height; pixelY++)
                     {
-                        Complex point = canvas.TransformCoordinates(pixelX, pixelY) + central;
+                        Complex point = canvas.TransformCoordinates(pixelX, pixelY);
 
                             // Obtiene el valor de escape del punto
-                            fractalPoints.Points[pixelX, pixelY] = ComputePoint(point, canvas.Parameters.Iterations, canvas.Parameters.Scape);
+                            fractalPoints.Points[pixelX, pixelY] = ComputePoint(point, central, canvas.Parameters.Iterations, canvas.Parameters.Scape);
                     }
                     // Lanza el evento
                     RaiseEvent(pixelX, canvas.Width);
@@ -51,10 +51,10 @@ namespace Fractals.Models.Fractals.Generators
         /// <summary>
         ///     Calcula el valor de escape de un número complejo
         /// </summary>
-        private double ComputePoint(Complex c, int iterations, int scape)
+        private double ComputePoint(Complex point, Complex c, int iterations, int scape)
         {
             int iteration = 0;
-            Complex z = new();
+            Complex z = point;
 
                 // Calcula el valor hasta que se sale del ámbito o se sobrepasa el número de iteraciones
                 do

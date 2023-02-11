@@ -28,6 +28,8 @@ namespace Fractals
 			ViewModel.InitViewModel();
 			// Inicializa los controles
 			imgFractal.InitControl(ViewModel);
+			imgFractal.DrawEnd += (_, _) => prgProgres.Value = 0;
+			imgPallete.InitControl(ViewModel);
 		}
 
 		/// <summary>
@@ -35,8 +37,11 @@ namespace Fractals
 		/// </summary>
 		private async Task DrawAsync()
 		{
-			imgFractal.Pallete = imgPallete.Pallete;
-			await imgFractal.DrawAsync(CancellationToken.None);
+			if (imgPallete.ViewModel?.Pallete is not null)
+			{
+				imgFractal.Pallete = imgPallete.ViewModel.Pallete;
+				await imgFractal.DrawAsync(CancellationToken.None);
+			}
 		}
 
 		/// <summary>

@@ -37,8 +37,8 @@ namespace Fractals.Models.Fractals
 			double newYMin = (double) start.Y / imageHeight * distY + Parameters.YMin;
 			double newYMax = (double) end.Y / imageHeight * distY + Parameters.YMin;
 
-                    // Redimensiona los parámetros
-                    Parameters.ResizeTo(newXMin, newYMin, newXMax, newYMax);
+                // Redimensiona los parámetros
+                Parameters.ResizeTo(newXMin, newYMin, newXMax, newYMax);
 		}
 
 		/// <summary>

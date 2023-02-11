@@ -30,22 +30,22 @@ namespace Fractals.Models.Fractals
         /// <summary>
         ///     X mínima
         /// </summary>
-        public double XMin { get; private set; }
+        public double XMin { get; set; }
 
         /// <summary>
         ///     Y mínima
         /// </summary>
-        public double YMin { get; private set; }
+        public double YMin { get; set; }
 
         /// <summary>
         ///     X máxima
         /// </summary>
-        public double XMax { get; private set; }
+        public double XMax { get; set; }
 
         /// <summary>
         ///     Y máxima
         /// </summary>
-        public double YMax { get; private set; }
+        public double YMax { get; set; }
 
         /// <summary>
         ///     Centro X (cuando se necesitan parámetros adicionales)
@@ -65,6 +65,6 @@ namespace Fractals.Models.Fractals
         /// <summary>
         ///     Número de iteraciones
         /// </summary>
-        public int Iterations { get; }
+        public int Iterations { get; set; }
 	}
 }

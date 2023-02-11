@@ -32,8 +32,6 @@ namespace Fractals.Models.Fractals.Generators
 			Height = height;
 			// Crea el generador predeterminado
 			Update(FractalType.Mandelbrot);
-			//Generator = new MandelbrotSetGenerator();
-			//Canvas = new CanvasModel(Generator.GetDefault(), width, height);
 		}
 
 		/// <summary>
@@ -113,7 +111,7 @@ namespace Fractals.Models.Fractals.Generators
 		/// <summary>
 		///		Canvas del generador
 		/// </summary>
-		private CanvasModel? Canvas { get; set; }
+		public CanvasModel? Canvas { get; set; }
 
 		/// <summary>
 		///		Ancho

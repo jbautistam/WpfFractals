@@ -9,7 +9,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 using Fractals.Models.Fractals;
-using Fractals.Models.Fractals.Generators;
 using Fractals.Models.Palletes;
 
 namespace Fractals.Controls.Fractal
@@ -19,6 +18,8 @@ namespace Fractals.Controls.Fractal
     /// </summary>
     public partial class FractalImage : UserControl
 	{
+		// Eventos públicos
+		public event EventHandler? DrawEnd;
         // Variables privadas
         private Point? dragStartPoint = null;
 
@@ -42,7 +43,12 @@ namespace Fractals.Controls.Fractal
 		internal async Task DrawAsync(CancellationToken cancellationToken)
 		{
 			if (ViewModel is not null && ViewModel.CanDraw && Pallete is not null)
+			{
+				// Asigna el bitmap a la imagen
 				imgFractal.Source = CreateBitmap(await ViewModel.ComputeFractalAsync(cancellationToken), Pallete);
+				// Lanza el evento de final de dibujo
+				DrawEnd?.Invoke(this, EventArgs.Empty);
+			}
 		}
 
 		/// <summary>

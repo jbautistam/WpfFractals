@@ -16,6 +16,7 @@ namespace Fractals.ViewModels
 		public MainViewModel()
 		{
 			FractalViewModel = new(this);
+			PalletesViewModel = new(this);
 		}
 
 		/// <summary>
@@ -23,7 +24,11 @@ namespace Fractals.ViewModels
 		/// </summary>
 		public void InitViewModel()
 		{
+			// Carga los combos de la ventana
 			LoadCombos();
+			// Inicializa los ViewModel
+			FractalViewModel.Initialize();
+			PalletesViewModel.InitViewModel();
 		}
 
 		/// <summary>
@@ -75,7 +80,12 @@ namespace Fractals.ViewModels
 		public FractalViewModel FractalViewModel { get; }
 
 		/// <summary>
-		///		Tipos de fractales
+		///		ViewModel para el control de paletas
+		/// </summary>
+		public PalletesViewModel PalletesViewModel { get; }
+
+		/// <summary>
+		///		Combo con los tipos de fractales
 		/// </summary>
 		public ComboViewModel? ComboFractalTypes
 		{

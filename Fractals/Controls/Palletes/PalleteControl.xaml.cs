@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 using Fractals.Models.Palletes;
+using Fractals.ViewModels;
 
 namespace Fractals.Controls.Palletes
 {
@@ -28,15 +20,16 @@ namespace Fractals.Controls.Palletes
 		}
 
 		/// <summary>
-		///		Dibuja la paleta
+		///		Inicializa el control
 		/// </summary>
-		private void InitControl()
+		public void InitControl(MainViewModel mainViewModel)
 		{
-			// Crea la paleta
-			Pallete = new Generators.Pallete.SmoothPalleteGenerator().Generate(1_000);
-			// Pallete = new Generators.Pallete.GradiantPalleteGenerator().Generate(Color.FromArgb(0, 0, 0, 0), Color.FromArgb(255, 255, 255, 0), 1_000);
-			// Pallete = new Generators.Pallete.ComponentePalleteGenerator().Generate(false, false, true, 1_000);
-			// Dibuja la paleta
+			// Asigna el contexto del control
+			DataContext = ViewModel = mainViewModel.PalletesViewModel;
+			ViewModel.InitViewModel();
+			// Añade el manejador de eventos
+			ViewModel.Updated += (_, _) => Draw();
+			// Dibuja la paleta por primera vez
 			Draw();
 		}
 
@@ -45,8 +38,8 @@ namespace Fractals.Controls.Palletes
 		/// </summary>
 		private void Draw()
 		{
-			if (Pallete is not null)
-				imgPallete.Source = CreateBitmap(Pallete);
+			if (ViewModel?.Pallete is not null)
+				imgPallete.Source = CreateBitmap(ViewModel.Pallete);
 		}
 
 		/// <summary>
@@ -95,15 +88,10 @@ namespace Fractals.Controls.Palletes
 				return buffer;
 		}
 
-		private void UserControl_Loaded(object sender, RoutedEventArgs e)
-		{
-			InitControl();
-		}
-
 		/// <summary>
-		///		Paleta
+		///		ViewModel principal
 		/// </summary>
-		public PalleteModel? Pallete { get; private set; }
+		public PalletesViewModel? ViewModel { get; private set; }
 
 		private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
 		{

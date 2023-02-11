@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+
 using Fractals.Models.Fractals;
 using Fractals.Models.Fractals.EventArguments;
 using Fractals.Models.Fractals.Generators;
@@ -14,16 +15,19 @@ namespace Fractals.ViewModels
 	public class FractalViewModel : Base.BaseObservableObject
 	{
 		// Variables privadas
-		private FractalGenerator _fractalGenerator;
+		private ParametersViewModel _parametersViewModel;
 		private int _progressActual, _progressTotal;
 		private double _progressPercentage;
 		private bool _canDraw = true;
 
 		public FractalViewModel(MainViewModel mainViewModel)
 		{
+			// Asigna los viewModel
 			MainViewModel = mainViewModel;
-			_fractalGenerator = new(1_935, 1_047);
-			_fractalGenerator.ProgressChanged += (sender, args) => UpdateProgress(args);
+			_parametersViewModel = new(this);
+			// Inicializa el generador de fractales
+			FractalGenerator = new(1_935, 1_047);
+			FractalGenerator.ProgressChanged += (sender, args) => UpdateProgress(args);
 		}
 
 		/// <summary>
@@ -42,7 +46,8 @@ namespace Fractals.ViewModels
 		/// </summary>
 		public void Reset()
 		{
-			_fractalGenerator.Reset();
+			FractalGenerator.Reset();
+			ParametersViewModel.Initialize();
 		}
 
 		/// <summary>
@@ -50,12 +55,14 @@ namespace Fractals.ViewModels
 		/// </summary>
 		public async Task<FractalPointsModel?> ComputeFractalAsync(CancellationToken cancellationToken)
 		{
-			FractalPointsModel? fractalPoints = null;
+			FractalPointsModel? fractalPoints;
 
 				// Indica que no se puede dibujar
 				CanDraw = false;
+				// Actualiza los parámetros
+				ParametersViewModel.UpdateCanvas();
 				// Genera el fractal
-				fractalPoints = await _fractalGenerator.ComputeFractalAsync(cancellationToken);
+				fractalPoints = await FractalGenerator.ComputeFractalAsync(cancellationToken);
 				// Indica que ya se puede dibujar de nuevo
 				CanDraw = true;
 				// Devuelve el fractal generado
@@ -67,7 +74,8 @@ namespace Fractals.ViewModels
 		/// </summary>
 		public void Resize(Point topLeft, Point bottomRight, double actualWidth, double actualHeight)
 		{
-			_fractalGenerator.Resize(topLeft, bottomRight, actualWidth, actualHeight);
+			FractalGenerator.Resize(topLeft, bottomRight, actualWidth, actualHeight);
+			ParametersViewModel.Initialize();
 		}
 
 		/// <summary>
@@ -75,7 +83,8 @@ namespace Fractals.ViewModels
 		/// </summary>
 		public void UpdateFractal(FractalGenerator.FractalType type)
 		{
-			_fractalGenerator.Update(type);
+			FractalGenerator.Update(type);
+			ParametersViewModel.Initialize();
 		}
 
 		/// <summary>
@@ -92,6 +101,20 @@ namespace Fractals.ViewModels
 		///		ViewModel principal
 		/// </summary>
 		public MainViewModel MainViewModel { get; }
+
+		/// <summary>
+		///		Generador de fractales
+		/// </summary>
+		internal FractalGenerator FractalGenerator { get; }
+
+		/// <summary>
+		///		ViewModel con los parámetros
+		/// </summary>
+		public ParametersViewModel ParametersViewModel
+		{
+			get { return _parametersViewModel; }
+			set { CheckObject(ref _parametersViewModel, value); }
+		}
 
 		/// <summary>
 		///		Indica si puede dibujar
