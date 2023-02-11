@@ -34,6 +34,15 @@ namespace Fractals.Controls.Palletes
 		}
 
 		/// <summary>
+		///		Actualiza la paleta
+		/// </summary>
+		internal void Update()
+		{
+			if (ViewModel?.Pallete is not null)
+				ViewModel.UpdatePallete();
+		}
+
+		/// <summary>
 		///		Dibuja la paleta
 		/// </summary>
 		private void Draw()

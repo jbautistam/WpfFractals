@@ -39,6 +39,7 @@ namespace Fractals
 		{
 			if (imgPallete.ViewModel?.Pallete is not null)
 			{
+				imgPallete.Update();
 				imgFractal.Pallete = imgPallete.ViewModel.Pallete;
 				await imgFractal.DrawAsync(CancellationToken.None);
 			}

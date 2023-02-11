@@ -68,19 +68,21 @@ namespace Fractals.ViewModels
 		/// <summary>
 		///		Actualiza la paleta
 		/// </summary>
-		private void UpdatePallete()
+		public void UpdatePallete()
 		{
 			// Modifica la paleta
 			switch ((PalleteType) (ComboPalleteTypes?.SelectedId ?? 0))
 			{
 				case PalleteType.Gradient:
-						Pallete = new Generators.Pallete.GradiantPalleteGenerator().Generate(Color.FromArgb(0, 0, 0, 0), Color.FromArgb(255, 255, 255, 0), 1_000);
+						Pallete = new Generators.Pallete.GradiantPalleteGenerator().Generate(Color.FromArgb(0, 0, 0, 0), Color.FromArgb(255, 255, 255, 0), 
+																							 MainViewModel.FractalViewModel.ParametersViewModel.Iterations);
 					break;
 				case PalleteType.Component:
-						Pallete = new Generators.Pallete.ComponentePalleteGenerator().Generate(false, false, true, 1_000);
+						Pallete = new Generators.Pallete.ComponentePalleteGenerator().Generate(false, false, true, 
+																							   MainViewModel.FractalViewModel.ParametersViewModel.Iterations);
 					break;
 				default:
-						Pallete = new Generators.Pallete.SmoothPalleteGenerator().Generate(1_000);
+						Pallete = new Generators.Pallete.SmoothPalleteGenerator().Generate(MainViewModel.FractalViewModel.ParametersViewModel.Iterations);
 					break;
 			}
 			// Lanza el evento de modificación
