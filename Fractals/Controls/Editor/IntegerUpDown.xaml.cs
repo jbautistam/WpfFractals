@@ -9,7 +9,7 @@ using System.Windows.Media;
 namespace Fractals.Controls.Editor
 {
 	/// <summary>
-	///		Control de usuario para edición de un valor numérico
+	///		Control de usuario para edición de un valor numérico entero
 	/// </summary>
 	[TemplatePart(Name = "PART_NumericTextBox", Type = typeof(TextBox))]
 	[TemplatePart(Name = "PART_IncreaseButton", Type = typeof(RepeatButton))]
