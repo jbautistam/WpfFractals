@@ -106,5 +106,10 @@ namespace Fractals.Controls.Palletes
 		{
 			Draw();
 		}
+
+		private void PortableColorPicker_ColorChanged(object sender, RoutedEventArgs e)
+		{
+			Draw();
+        }
 	}
 }
